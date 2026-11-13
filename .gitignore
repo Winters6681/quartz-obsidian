@@ -1,0 +1,8 @@
+.DS_Store
+node_modules
+public
+.obsidian
+.quartz-cache
+.quartz-preview/
+private/
+.vscode/
