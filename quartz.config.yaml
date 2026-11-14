@@ -202,7 +202,8 @@ plugins:
   - source: "@quartz-community/footer"
     enabled: true
     options:
-      links: {}
+      links:
+        "Site and content by Shih-Jie Shih": https://github.com/Winters6681
     layout:
       position: footer
       priority: 50
