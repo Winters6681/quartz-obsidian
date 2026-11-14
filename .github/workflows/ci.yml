@@ -7,11 +7,9 @@ concurrency:
 on:
   push:
     branches:
-      - main
       - claude/adoring-brahmagupta-hqteoj
   pull_request:
     branches:
-      - main
       - claude/adoring-brahmagupta-hqteoj
   workflow_dispatch:
 
