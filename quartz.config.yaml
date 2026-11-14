@@ -207,7 +207,7 @@ plugins:
       position: footer
       priority: 50
   - source: "@quartz-community/recent-notes"
-    enabled: true
+    enabled: false
     options:
       title: "Recent notes"
       limit: 3
