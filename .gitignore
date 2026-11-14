@@ -6,3 +6,6 @@ public
 .quartz-preview/
 private/
 .vscode/
+
+# Files live in pCloud; the site only links to them
+*.pdf

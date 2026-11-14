@@ -1,31 +1,10 @@
-# Quartz v5 Template for GitHub pages
+# Research notes
 
-[Quartz][] is a set of tools that helps you publish your [digital garden](https://jzhao.xyz/posts/networked-thought) and notes as a website for free.
+Notes from an Obsidian vault, published with [Quartz][] to two Cloudflare Pages sites: a private one with everything (behind Cloudflare Access) and a public one with only notes marked `publish: true`.
 
-This template repository
-
-- builds the website from the notes and publishes to GitHub pages by GitHub actions, using [quartz-action][] and a Quartz version pinned in `quartz.version`.
-- keeps the pinned Quartz fresh: a weekly workflow opens a pull request when a newer version is available.
-- is [Obsidian](https://obsidian.md/)-friendly (thanks to [Quartz][]). Open the `content` folder as an Obsidian vault.
+See [SETUP.md](SETUP.md) for the setup checklist. Based on [sosiristseng/template-quartz](https://github.com/sosiristseng/template-quartz).
 
 [Quartz]: https://github.com/jackyzha0/quartz
-[quartz-action]: https://raven-wing.github.io/quartz-action/
-
-## How-to
-
-Click the big green `Use this template` button to create a repository. Clone the created repository using GitHub Desktop or the `git clone` command:
-
-```bash
-git clone https://github.com/$USER/$REPO.git
-```
-
-Open the `content` folder as an Obsidian vault, edit/add notes and use GitHub Desktop or `git push` command to commit and push the changes to GitHub. GitHub actions will build and publish the website automatically.
-
-> [!IMPORTANT]
-> You need to enable GitHub pages in your repository settings -> pages -> selecting `GitHub actions` as the source.
-
-> [!NOTE]
-> If you cloned an older revision of this template, when Quartz was a git submodule, remove the leftover: `git submodule deinit -f runtime && git rm -f runtime && rm -rf .git/modules/runtime`.
 
 ## Preview your Quartz website
 
@@ -39,4 +18,4 @@ The script checks out the pinned Quartz into `.quartz-preview/` (gitignored) and
 
 ## Updating the Quartz version
 
-Every week a workflow checks [Quartz][] `v5` and opens a pull request updating `quartz.version` when it moved. The website build runs on that pull request; merge it manually once it passes. To update on your own schedule, edit the commit SHA in `quartz.version`.
+Edit the commit SHA in `quartz.version`.

@@ -20,6 +20,7 @@ jobs:
   linkcheck:
     runs-on: ubuntu-latest
     permissions:
+      contents: read # required to check out a private repository
       issues: write # required for peter-evans/create-issue-from-file
     steps:
       - name: Checkout

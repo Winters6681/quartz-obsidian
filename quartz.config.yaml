@@ -1,12 +1,12 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/jackyzha0/quartz/v5/quartz/plugins/quartz-plugins.schema.json
 configuration:
-  pageTitle: Quartz 5
+  pageTitle: Research notes
   pageTitleSuffix: ""
   enableSPA: true
   enablePopovers: true
   analytics: null
   locale: en-US
-  baseUrl: sosiristseng.github.io/template-quartz
+  baseUrl: research-private.pages.dev
   ignorePatterns:
     - private
     - templates
@@ -202,8 +202,7 @@ plugins:
   - source: "@quartz-community/footer"
     enabled: true
     options:
-      links:
-        GitHub: https://github.com/sosiristseng
+      links: {}
     layout:
       position: footer
       priority: 50

@@ -1,7 +1,23 @@
 ---
-title: Welcome to Quartz 5
+title: Research notes
+publish: true
 ---
 
-Quartz is a fast, batteries-included static-site generator that transforms Markdown content into fully functional websites. Thousands of students, developers, and teachers publish personal notes, wikis, and [digital gardens](https://jzhao.xyz/posts/networked-thought) to the web.
+A window onto my notes. Writing happens in Obsidian and planning in Notion; this site only reads from them.
 
-See the [official documentation](https://quartz.jzhao.xyz/) for more details.
+## Maps of content
+
+Start here. Each map is the entry point for one topic, course or paper.
+
+- [[mocs/index|All maps of content]]
+
+## Sections
+
+- [[projects/index|Projects]]: one page per paper or project
+- [[literature/index|Literature notes]]: one note per source
+- [[permanent/index|Permanent notes]]: one idea per note
+- [[pointers/index|Pointers]]: links to Notion pages and Claude chats
+
+## Elsewhere
+
+- Tasks and daily log: Notion dashboard (add the link here)

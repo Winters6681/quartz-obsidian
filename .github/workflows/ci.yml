@@ -1,4 +1,13 @@
-name: Deploy to GitHub pages
+name: Build and deploy to Cloudflare Pages
+
+# Builds the site twice from the same content:
+#   private: every note except those marked `draft: true`, deployed to a Pages project behind Cloudflare Access
+#   public:  only notes with `publish: true`, deployed to a second Pages project
+# The two are separate builds so private titles and text never reach the public search index.
+#
+# Repository secrets:   CLOUDFLARE_API_TOKEN, CLOUDFLARE_ACCOUNT_ID
+# Repository variables: PUBLIC_SITE_ENABLED = true   turns on the public site (off until then)
+#                       PRIVATE_BASE_URL, PUBLIC_BASE_URL   only needed with a custom domain
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -13,32 +22,41 @@ on:
       - main
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   build:
+    name: ${{ matrix.site }}
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - site: private
+            project: research-private
+            explicit_publish: false
+          - site: public
+            project: research-public
+            explicit_publish: true
+    env:
+      # No deploy until the Cloudflare secrets exist, so the build stays green before setup.
+      DEPLOY: ${{ secrets.CLOUDFLARE_API_TOKEN != '' && github.ref == 'refs/heads/main' && github.event_name != 'pull_request' && (matrix.site == 'private' || vars.PUBLIC_SITE_ENABLED == 'true') }}
+      BASE_URL: ${{ matrix.site == 'private' && (vars.PRIVATE_BASE_URL || 'research-private.pages.dev') || (vars.PUBLIC_BASE_URL || 'research-public.pages.dev') }}
     steps:
       - name: Checkout
         uses: actions/checkout@v7
         with:
           fetch-depth: 0 # Fetch all history, so page dates come from commits
           persist-credentials: false # the build never pushes
-      - name: Setup Pages
-        id: pages
-        uses: actions/configure-pages@v6
-      - name: Strip Protocol from URL
-        id: clean_url
+      - name: Set baseUrl
+        run: yq -i '.configuration.baseUrl = strenv(BASE_URL)' quartz.config.yaml
+      - name: Keep only notes marked publish true
+        if: matrix.explicit_publish
         run: |
-          # Get the raw URL (e.g., https://github.io)
-          RAW_URL="${{ steps.pages.outputs.base_url }}"
-
-          # Strip both http:// and https:// prefixes
-          CLEANED_URL="${RAW_URL#http:///}"
-          CLEANED_URL="${CLEANED_URL#https://}"
-
-          # Save it to the environment output
-          echo "stripped_url=$CLEANED_URL" >> $GITHUB_OUTPUT
-      - name: Autoset baseUrl
-        run: yq -i '.configuration.baseUrl = "${{ steps.clean_url.outputs.stripped_url }}"' quartz.config.yaml
+          yq -i '(.plugins[] | select(.source == "@quartz-community/explicit-publish") | .enabled) = true' quartz.config.yaml
+          # Stop here if the filter did not switch on, so an unfiltered build can never reach the public site.
+          test "$(yq '.plugins[] | select(.source == "@quartz-community/explicit-publish") | .enabled' quartz.config.yaml)" = "true"
       - name: Read Quartz version
         id: quartz_version
         run: echo "sha=$(cat quartz.version)" >> "$GITHUB_OUTPUT"
@@ -49,25 +67,10 @@ jobs:
           quartz-version: ${{ steps.quartz_version.outputs.sha }}
           config: quartz.config.yaml
           content-dir: content
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v5
+      - name: Deploy to Cloudflare Pages
+        if: env.DEPLOY == 'true'
+        uses: cloudflare/wrangler-action@v3
         with:
-          path: ${{ steps.quartz.outputs.output-dir }}
-
-  # Deployment job
-  deploy:
-    needs: build
-    if: ${{ github.ref == 'refs/heads/main'}}
-    # Grant GITHUB_TOKEN the permissions required to make a Pages deployment
-    permissions:
-      pages: write # to deploy to Pages
-      id-token: write # to verify the deployment originates from an appropriate source
-      actions: read # to download an artifact uploaded by `actions/upload-pages-artifact`
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-slim
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v5
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy "${{ steps.quartz.outputs.output-dir }}" --project-name=${{ matrix.project }} --branch=main
