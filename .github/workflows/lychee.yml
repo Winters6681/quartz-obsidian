@@ -6,7 +6,7 @@ on:
     - cron: '0 0 1 * *' # Every month
   push:
     branches:
-      - claude/adoring-brahmagupta-hqteoj
+      - main
     paths:
       - 'content/**'
       - '.lycheeignore'
