@@ -17,6 +17,7 @@ Start here. Each map is the entry point for one topic, course or paper.
 - [[literature/index|Literature notes]]: one note per source
 - [[permanent/index|Permanent notes]]: one idea per note
 - [[pointers/index|Pointers]]: links to Notion pages and Claude chats
+- [[tags/index|Tags]]: every tag, with the notes that carry it
 
 ## Elsewhere
 

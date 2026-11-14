@@ -1,6 +1,7 @@
+---
+title: Notes by tag
+---
 
-```dataview
-TABLE length(rows) AS "筆記數量"
-FROM ""
-GROUP BY file.tags
-```
+Notes grouped by their tags, with the number of notes in each group. For one page per tag, see [[tags/index|all tags]].
+
+![[Notes by tag.base]]
