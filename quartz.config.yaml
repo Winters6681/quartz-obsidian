@@ -6,7 +6,7 @@ configuration:
   enablePopovers: true
   analytics: null
   locale: en-US
-  baseUrl: research-private.pages.dev
+  baseUrl: winters6681.github.io/quartz-obsidian
   ignorePatterns:
     - private
     - templates
